@@ -7,6 +7,8 @@ from math import ceil
 
 dizhi_map = {1: '子', 2: '丑', 3: '寅', 4: '卯', 5: '辰', 6: '巳', 7: '午', 8: '未', 9: '申', 10: '酉', 11: '戌', 12: '亥', }
 gua_map = {1: '天', 2: '泽', 3: '火', 4: '雷', 5: '风', 6: '水', 7: '山', 8: '地'}
+卦 = {0: '坤', 1: '艮', 2: '坎', 3: '巽', 4: '震', 5: '离', 6: '兑', 7: '乾'}
+象 = {0: '地', 1: '山', 2: '水', 3: '风', 4: '雷', 5: '火', 6: '泽', 7: '天'}
 
 
 def moder(num, mod_by):
@@ -16,16 +18,36 @@ def moder(num, mod_by):
     return result
 
 
+def calc_change_gua(上卦数, 下卦数, 动爻数):
+    用下卦 = True
+    用卦数 = 下卦数
+    if 动爻数 >= 4:
+        用下卦 = False
+        用卦数 = 上卦数
+        动爻数 -= 3
+    if 动爻数 == 3:
+        动爻数 = 1
+    elif 动爻数 == 1:
+        动爻数 = 4
+    num = 8 - 用卦数;
+    num = num ^ 动爻数
+    变卦数 = 8 - num
+    if 用下卦:
+        return 上卦数, 变卦数
+    else:
+        return 变卦数, 下卦数
+
+
 def lunar_h(hour):
     return ceil(hour / 2) + 1
 
 
 # 获取当前时间：
 current_time = time.localtime()
-year = 1993 or current_time.tm_year
-month = 4 or current_time.tm_mon
-day = 24 or current_time.tm_mday
-hour = 1 or current_time.tm_hour
+year = current_time.tm_year
+month = current_time.tm_mon
+day = current_time.tm_mday
+hour = current_time.tm_hour
 
 lunar_date = ZhDate.from_datetime(datetime(year, month, day))
 print(lunar_date)
@@ -52,8 +74,21 @@ down_gua = gua_map[down_gua_num]
 move_yao = gua_map[move_yao_num]
 up_gua_img = gua_image[up_gua_num]
 down_gua_img = gua_image[down_gua_num]
+
 move_gua_img = gua_image[move_yao_num]
+
+up_change_gua_num, down_change_gua_num = calc_change_gua(up_gua_num, down_gua_num, move_yao_num)
+up_change_gua = gua_map[up_change_gua_num]
+down_change_gua = gua_map[down_change_gua_num]
+up_change_gua_img = gua_image[up_change_gua_num]
+down_change_gua_img = gua_image[down_change_gua_num]
+
 print('上卦', up_gua_num, up_gua, up_gua_img)
 print('下卦', down_gua_num, down_gua, down_gua_img)
 print('本卦', gua64[up_gua + down_gua])
+print('——————————————')
 print('动爻', move_yao_num, move_yao, move_gua_img)
+print('——————————————')
+print('上变卦', up_change_gua_num, up_change_gua, up_change_gua_img)
+print('下变卦', down_change_gua_num, down_change_gua, down_change_gua_img)
+print('变卦', gua64[up_change_gua + down_change_gua])
