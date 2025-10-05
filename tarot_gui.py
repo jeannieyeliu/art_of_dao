@@ -4,6 +4,7 @@ import random
 from PIL import Image, ImageTk
 import os
 from datetime import datetime
+import re
 
 # Define tarot spreads
 TAROT_SPREADS = [
@@ -58,6 +59,10 @@ class TarotApp:
         self.master.geometry("800x800")  # Increased height to 800
 
         self.cards_folder = "TarotCards"
+        self.results_folder = "Taro_results"
+        if not os.path.exists(self.results_folder):
+            os.makedirs(self.results_folder)
+        
         self.card_back = ImageTk.PhotoImage(Image.open(os.path.join(self.cards_folder, "普及版背面.jpg")).resize((100, 150)))
         self.drawn_cards = []
         self.card_labels = []  # New list to store labels for card names
@@ -141,8 +146,14 @@ class TarotApp:
 
     def save_reading(self):
         question = self.question_entry.get()
+        current_date = datetime.now().strftime("%Y%m%d")
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         spread_name = self.spread_var.get()
+        
+        # Create a filename-safe version of the question (first 20 characters)
+        safe_question = re.sub(r'[^\w\-_\. ]', '_', question[:20])
+        filename = f"{current_date}_{safe_question}.txt"
+        filepath = os.path.join(self.results_folder, filename)
         
         result = []
         for i, (_, is_reversed, card) in enumerate(self.drawn_cards):
@@ -150,16 +161,15 @@ class TarotApp:
             position = "逆位" if is_reversed else "正位"
             result.append(f"{card_name} ({position})")
 
-        with open("taro_history.txt", "a", encoding="utf-8") as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             f.write(f"日期时间: {current_time}\n")
             f.write(f"问题: {question}\n")
             f.write(f"牌阵: {spread_name}\n")
             f.write("结果:\n")
             for i, card_result in enumerate(result, 1):
                 f.write(f"  {i}. {card_result}\n")
-            f.write("\n")  # Add a blank line between readings
 
-        print("Reading saved to taro_history.txt")
+        print(f"Reading saved to {filepath}")
 
 if __name__ == "__main__":
     root = tk.Tk()
