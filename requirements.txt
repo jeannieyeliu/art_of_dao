@@ -1,1 +1,4 @@
 ZhDate
+requests
+Pillow
+beautifulsoup4

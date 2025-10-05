@@ -32,7 +32,7 @@ for i in range(6, 0, -1):
 
 print(number)
 卦 = {0: '坤', 1: '艮', 2: '坎', 3: '巽', 4: '震', 5: '离', 6: '兑', 7: '乾'}
-象 = {0: '地', 1: '山', 2: '水', 3: '风', 4: '雷', 5: '火', 6: '泽 ', 7: '天'}
+象 = {0: '地', 1: '山', 2: '水', 3: '风', 4: '雷', 5: '火', 6: '泽', 7: '天'}
 
 上卦数 = number[5] + number[4] * 2 + number[3] * 4
 下挂数 = number[2] + number[1] * 2 + number[0] * 4
@@ -50,5 +50,5 @@ if (bianyao_count < 3):
 print('变卦：')
 bian_result = gua64[象[上卦数2] + 象[下挂数2]]
 print(bian_result)
-write_history("变卦："+bian_result)
+write_history("    变卦："+bian_result)
 
