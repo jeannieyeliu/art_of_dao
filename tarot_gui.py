@@ -5,7 +5,7 @@ from PIL import Image, ImageTk
 import os
 from datetime import datetime
 import re
-
+# tarot_env/bin/python tarot_gui.py
 # Define tarot spreads
 TAROT_SPREADS = [
     {

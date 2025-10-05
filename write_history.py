@@ -6,10 +6,10 @@ def write_history(gua):
     current_time = time.localtime()
     
     # Ensure Gua_history directory exists
-    if not os.path.exists('Gua_history'):
-        os.makedirs('Gua_history')
+    if not os.path.exists('Gua_result'):
+        os.makedirs('Gua_result')
     
-    file_path = os.path.join('Gua_history', 'gua_history.txt')
+    file_path = os.path.join('Gua_result', 'gua_history.txt')
     with open(file_path, 'a') as file:
         year = current_time.tm_year
         month = current_time.tm_mon
